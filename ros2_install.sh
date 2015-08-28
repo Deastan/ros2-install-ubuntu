@@ -23,41 +23,51 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 #For more info: https://github.com/ros2/examples/wiki
+
+
+#install_package function check's out if a package is already installed, if not it installs it. 
+
 install_package()
 {
         if test  ! "` dpkg -l |grep $*`"
         then
-                apt-get -qq install  $*
+                apt-get -y install  $*
         fi
 }
 
-PACKAGES=( git wget build-essential cppcheck cmake libopencv-dev python-empy python3-empy python3-setuptools python3-nose python3-pip python3-vcstool )
+
+#Packages declaration
+
+PACKAGES=( build-essential cppcheck cmake libopencv-dev python-empy python3-empy python3-setuptools python3-nose python3-pip python3-vcstool )
 
 
 #Add ROS apt repositories to your system:
 
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
-wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
+apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
 
 #Get the osrf (gazebo) debian repository:
 
 sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-latest.list'
-wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-
+apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys D2486D2DD83DB69272AFE98867170598AF249743
 
 #Install GCC, G++ CMake and Python3 EmPy packages and setuptools
 
 echo ".....Updating all packages....."
-apt-get update -qq                      #(-qq)Show just errors on the screen 
+apt-get update -qq                      #(-qq) option shows just errors on the screen 
+
+apt-get -y install git
+apt-get -y install wget
+apt-get -y install libopensplice64
 
 for i in "${PACKAGES[@]}"
 do
         install_package $i
 done
 
+pip3 install -U setuptools
 apt-get update -qq
 
-pip3 install -U setuptools
 
 #Create a workspace and clone all repositories:
 
@@ -68,12 +78,18 @@ cd ~/$nom
 wget https://raw.githubusercontent.com/ros2/examples/master/ros2.repos
 vcs import ~/$nom/src < ros2.repos
 echo "......\"$nom\" workspace created....."
-apt-get update -qq
 
-if test ! "`dpkg -l |grep libopensplice64`"
-then
-        apt-get -qq install libopensplice64  # from packages.osrfoundation.org
-fi
+
+#if test ! "`dpkg -l |grep libopensplice64`"
+#then
+#        apt-get -y install libopensplice64  # from packages.osrfoundation.org
+#fi
+
+
+
+#Create .bashrc
+
+touch ~/.bashrc
 export OSPL_URI=file:///usr/etc/opensplice/config/ospl.xml
 
 
