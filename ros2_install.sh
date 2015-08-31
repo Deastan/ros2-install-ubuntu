@@ -75,19 +75,18 @@ read -p "Please type a name for the workspace:  " nom
 echo $nom
 mkdir -p ~/$nom/src
 cd ~/$nom
-wget https://raw.githubusercontent.com/ros2/examples/master/ros2.repos
+wget https://raw.githubusercontent.com/ros2/ros2/master/ros2.repos
 vcs import ~/$nom/src < ros2.repos
 echo "......\"$nom\" workspace created....."
 
 
-#if test ! "`dpkg -l |grep libopensplice64`"
-#then
-#        apt-get -y install libopensplice64  # from packages.osrfoundation.org
-#fi
+if test ! "`dpkg -l |grep libopensplice64`"
+then
+        apt-get -y install libopensplice64  # from packages.osrfoundation.org
+fi
 
 
-
-#Create .bashrc
+#Add to .bashrc
 
 touch ~/.bashrc
 export OSPL_URI=file:///usr/etc/opensplice/config/ospl.xml
@@ -105,9 +104,9 @@ export OSPL_URI=file:///usr/etc/opensplice/config/ospl.xml
 #apt-get update
 #apt-get install libopensplice64 2> /dev/null # from packages.osrfoundation.org
 
-#Add this to you ~/.bashrc
-
-#export OSPL_URI=file:///usr/etc/opensplice/config/ospl.xml
-
 #Build the prototype using the bootstrap script from ament_tools
+
+src/ament/ament_tools/scripts/ament.py build --build-tests --symlink-install
+
+
 
