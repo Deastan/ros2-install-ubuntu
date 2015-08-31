@@ -107,6 +107,6 @@ export OSPL_URI=file:///usr/etc/opensplice/config/ospl.xml
 #Build the prototype using the bootstrap script from ament_tools
 
 src/ament/ament_tools/scripts/ament.py build --build-tests --symlink-install
-
+. install/local_setup.bash
 
 
